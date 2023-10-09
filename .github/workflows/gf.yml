@@ -186,6 +186,7 @@ jobs:
         ls -l /mnt
         sudo mv /home/runner/go /mnt/go
         ln -s /mnt/go /home/runner/go
+        ls -l /mnt
         mkdir -p /mnt/.cache/go-build
         sudo mv /home/runner/.cache /mnt/.cache
         ln -s /mnt/.cache /home/runner/.cache
