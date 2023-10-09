@@ -176,21 +176,37 @@ jobs:
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
+    - name: show disk space
+      run:  df -h
       
     - name: Start Nacos Containers
       run:  docker-compose -f ".github/workflows/nacos/docker-compose.yml" up -d --build
+    - name: show disk space
+      run:  df -h
 
     - name: Start Redis Cluster Containers
       run:  docker-compose -f ".github/workflows/redis/docker-compose.yml" up -d --build
+    - name: show disk space
+      run:  df -h
 
     - name: Start Consul Containers
       run:  docker-compose -f ".github/workflows/consul/docker-compose.yml" up -d --build
+    - name: show disk space
+      run:  df -h
 
     - name: Start Minikube
       uses: medyagh/setup-minikube@master
 
     - name: show disk space
       run:  df -h
+
+    - name: free disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        df -h
 
     - name: Setup Golang ${{ matrix.go-version }}
       uses: actions/setup-go@v4
