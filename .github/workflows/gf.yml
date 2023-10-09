@@ -178,9 +178,10 @@ jobs:
     - name: show disk space
       run:  |
         ls -l /mnt
-        sudo mkdir -p /mnt/go/.cache/go-build
-        sudo mkdir -p /mnt/go/pkg/mod
-        sudo chown -R $USER:$USER /mnt/go
+        sudo mv /home/runner/go /mnt/go
+        ln -s /mnt/go /home/runner/go
+        sudo mv /home/runner/.cache /mnt/.cache
+        ln -s /mnt/.cache /home/runner/.cache
         ls -l /mnt
         # tree /mnt
     - name: Setup Golang ${{ matrix.go-version }}
@@ -188,12 +189,12 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
         cache: false
-    - name: show disk space
-      run:  |
-        df -h
-        go env -w GOCACHE="/mnt/go/.cache/go-build"
-        go env -w GOMODCACHE="/mnt/go"
-        go env
+    # - name: show disk space
+    #   run:  |
+    #     df -h
+    #     go env -w GOCACHE="/mnt/go/.cache/go-build"
+    #     go env -w GOMODCACHE="/mnt/go"
+    #     go env
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
