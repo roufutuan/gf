@@ -180,6 +180,8 @@ jobs:
         ls -l /mnt
         sudo mkdir -p /mnt/go/.cache/go-build
         sudo mkdir -p /mnt/go/pkg/mod
+        ls -l /mnt
+        # tree /mnt
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
