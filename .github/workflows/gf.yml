@@ -172,7 +172,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: show disk space
-      run:  df -h
+      run:  |
+        df -h
+        docker info
+        
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
