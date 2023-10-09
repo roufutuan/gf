@@ -175,7 +175,7 @@ jobs:
       run:  |
         df -h
         docker info
-        
+
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
@@ -205,6 +205,7 @@ jobs:
 
     - name: free disk space
       run: |
+        docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
         sudo swapoff -a
         sudo rm -f /swapfile
         df -h
@@ -215,17 +216,24 @@ jobs:
         go-version: ${{ matrix.go-version }}
         cache: false
     - name: show disk space
-      run:  df -h
-    - name: Cache Go Modules
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-${{ matrix.goarch }}-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.goarch }}-${{ matrix.go-version }}-
-          ${{ runner.os }}-${{ matrix.goarch }}-
+      run:  |
+        df -h
+        mkdir -p /mnt/go/.cache/go-build
+        mkdir -p /mnt/go/pkg/mod
+        go env -w GOCACHE="/mnt/go/.cache/go-build"
+        go env -w GOMODCACHE="/mnt/go"
+        go env
+
+    # - name: Cache Go Modules
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       ~/.cache/go-build
+    #       ~/go/pkg/mod
+    #     key: ${{ runner.os }}-${{ matrix.goarch }}-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-${{ matrix.goarch }}-${{ matrix.go-version }}-
+    #       ${{ runner.os }}-${{ matrix.goarch }}-
     - name: show disk space
       run:  df -h
     - name: Before Script
