@@ -175,7 +175,11 @@ jobs:
       run:  |
         df -h
         docker info
-
+    - name: show disk space
+      run:  |
+        ls -l /mnt
+        sudo mkdir -p /mnt/go/.cache/go-build
+        sudo mkdir -p /mnt/go/pkg/mod
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
@@ -218,8 +222,8 @@ jobs:
     - name: show disk space
       run:  |
         df -h
-        mkdir -p /mnt/go/.cache/go-build
-        mkdir -p /mnt/go/pkg/mod
+        sudo mkdir -p /mnt/go/.cache/go-build
+        sudo mkdir -p /mnt/go/pkg/mod
         go env -w GOCACHE="/mnt/go/.cache/go-build"
         go env -w GOMODCACHE="/mnt/go"
         go env
