@@ -204,7 +204,6 @@ jobs:
       run: |
         sudo swapoff -a
         sudo rm -f /swapfile
-        docker rmi $(docker image ls -aq)
         df -h
 
     - name: Setup Golang ${{ matrix.go-version }}
