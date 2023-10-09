@@ -180,8 +180,20 @@ jobs:
         ls -l /mnt
         sudo mkdir -p /mnt/go/.cache/go-build
         sudo mkdir -p /mnt/go/pkg/mod
+        sudo chown -R $USER:$USER /mnt/go
         ls -l /mnt
         # tree /mnt
+    - name: Setup Golang ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: false
+    - name: show disk space
+      run:  |
+        df -h
+        go env -w GOCACHE="/mnt/go/.cache/go-build"
+        go env -w GOMODCACHE="/mnt/go"
+        go env
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
@@ -216,19 +228,7 @@ jobs:
         sudo rm -f /swapfile
         df -h
 
-    - name: Setup Golang ${{ matrix.go-version }}
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ matrix.go-version }}
-        cache: false
-    - name: show disk space
-      run:  |
-        df -h
-        sudo mkdir -p /mnt/go/.cache/go-build
-        sudo mkdir -p /mnt/go/pkg/mod
-        go env -w GOCACHE="/mnt/go/.cache/go-build"
-        go env -w GOMODCACHE="/mnt/go"
-        go env
+    
 
     # - name: Cache Go Modules
     #   uses: actions/cache@v3
