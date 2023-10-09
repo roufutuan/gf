@@ -175,6 +175,12 @@ jobs:
       run:  |
         df -h
         docker info
+ 
+    - name: Setup Golang ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: false
     - name: show disk space
       run:  |
         ls -l /mnt
@@ -184,11 +190,6 @@ jobs:
         ln -s /mnt/.cache /home/runner/.cache
         ls -l /mnt
         # tree /mnt
-    - name: Setup Golang ${{ matrix.go-version }}
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ matrix.go-version }}
-        cache: false
     # - name: show disk space
     #   run:  |
     #     df -h
