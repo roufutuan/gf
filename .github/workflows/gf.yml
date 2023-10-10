@@ -185,11 +185,11 @@ jobs:
       run:  |
         ls -l /mnt
         sudo mv /home/runner/go /mnt/go
-        ln -s /mnt/go /home/runner/go
+        ln /mnt/go /home/runner/go
         ls -l /mnt
         mkdir -p /home/runner/.cache/go-build
         sudo mv /home/runner/.cache /mnt/.cache
-        ln -s /mnt/.cache /home/runner/.cache
+        ln /mnt/.cache /home/runner/.cache
         ls -l /mnt
         # tree /mnt
     # - name: show disk space
