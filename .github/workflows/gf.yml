@@ -219,6 +219,9 @@ jobs:
     - name: show disk space
       run:  |
         df -h
+        docker image prune -a  # 删除未使用的所有镜像
+        docker container prune  # 删除未使用的容器
+        df -h
         exit 1
 
     - name: Build & Test
