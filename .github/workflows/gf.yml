@@ -173,15 +173,26 @@ jobs:
 
     - name: Start Apollo Containers
       run:  docker-compose -f ".github/workflows/apollo/docker-compose.yml" up -d --build
+    - name: show disk space
+      run:  df -h
       
     - name: Start Nacos Containers
       run:  docker-compose -f ".github/workflows/nacos/docker-compose.yml" up -d --build
 
+    - name: show disk space
+      run:  df -h
+
     - name: Start Redis Cluster Containers
       run:  docker-compose -f ".github/workflows/redis/docker-compose.yml" up -d --build
 
+    - name: show disk space
+      run:  df -h
+
     - name: Start Consul Containers
       run:  docker-compose -f ".github/workflows/consul/docker-compose.yml" up -d --build
+
+    - name: show disk space
+      run:  df -h
 
     # - name: Start Minikube
     #   uses: medyagh/setup-minikube@master
@@ -191,9 +202,17 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
         cache-dependency-path: '**/go.sum' 
-
+    
+    - name: show disk space
+      run:  df -h
+    
     - name: Before Script
       run:  bash .github/workflows/before_script.sh
+
+    - name: show disk space
+      run:  |
+        df -h
+        exit 1
 
     - name: Build & Test
       if: ${{ (github.event_name == 'push' && github.ref != 'refs/heads/master') || github.event_name == 'pull_request' }}
